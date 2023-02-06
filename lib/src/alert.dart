@@ -13,9 +13,7 @@ class Option<T> {
   const Option(this.label, this.value);
 
   static String getLabel<T>(List<Option<T>> options, T value) {
-    return options
-        .firstWhere((Option<T> o) => o.value == value, orElse: () => null)
-        ?.label;
+    return options.firstWhere((Option<T> o) => o.value == value, orElse: () => null)?.label;
   }
 
   static int getIndex<T>(List<Option<T>> options, T value) {
@@ -72,14 +70,14 @@ class Alert {
               title: new Text(title),
               content: content == null ? null : new Text(content),
               actions: <Widget>[
-                new FlatButton(
+                new TextButton(
                   child: new Text(cancel),
                   onPressed: () {
                     completer.complete(Alert.CANCEL);
                     Navigator.of(context).pop();
                   },
                 ),
-                new FlatButton(
+                new TextButton(
                   child: new Text(ok),
                   onPressed: () {
                     completer.complete(Alert.OK);
@@ -101,8 +99,7 @@ class Alert {
     if (ok == null) {
       ok = config.ok;
     }
-    TextEditingController controller =
-        new TextEditingController(text: value ?? "");
+    TextEditingController controller = new TextEditingController(text: value ?? "");
     try {
       var str = await showDialog(
           context: context,
@@ -135,7 +132,7 @@ class Alert {
                   autofocus: true,
                 ),
                 actions: <Widget>[
-                  new FlatButton(
+                  new TextButton(
                     child: new Text(ok),
                     onPressed: () {
                       Navigator.pop(context, controller.text);
@@ -155,10 +152,7 @@ class Alert {
   }
 
   static Future<int> alert(BuildContext context,
-      {String title,
-      String content,
-      String ok,
-      bool barrierDismissible: false}) async {
+      {String title, String content, String ok, bool barrierDismissible: false}) async {
     AlertConfig config = AlertProvider.getConfig(context);
     assert(config != null, "A `AlertProvider` must be supplied");
     if (ok == null) {
@@ -197,7 +191,7 @@ class Alert {
                 title: new Text(title),
                 content: content == null ? null : new Text(content),
                 actions: <Widget>[
-                  new FlatButton(
+                  new TextButton(
                     child: new Text(ok),
                     onPressed: () {
                       Navigator.pop(context, Alert.OK);
@@ -216,8 +210,7 @@ class Alert {
     }
   }
 
-  static Future<int> pick(BuildContext context,
-      {List<String> values, int index}) {
+  static Future<int> pick(BuildContext context, {List<String> values, int index}) {
     Completer<int> completer = new Completer<int>();
     showModalBottomSheet(
         context: context,
@@ -241,20 +234,17 @@ class Alert {
     return completer.future;
   }
 
-  static select<T>(BuildContext context,
-      {List<Option<T>> options, T value}) async {
+  static select<T>(BuildContext context, {List<Option<T>> options, T value}) async {
     int index = Option.getIndex<T>(options, value);
     if (index < 0) {
       index = 0;
     }
-    index = await pick(context,
-        values: options.map((Option o) => o.label).toList(), index: index);
+    index = await pick(context, values: options.map((Option o) => o.label).toList(), index: index);
     return options[index].value;
   }
 
   static void toast(BuildContext context, String message,
-      {ToastPosition position: ToastPosition.bottom,
-      ToastDuration duration: ToastDuration.short}) {
+      {ToastPosition position: ToastPosition.bottom, ToastDuration duration: ToastDuration.short}) {
     ToastManager manager = AlertProvider.getManager(context);
     assert(manager != null, "A `AlertProvider` must be supplied");
     manager.showToast(message, position: position, duration: duration);
